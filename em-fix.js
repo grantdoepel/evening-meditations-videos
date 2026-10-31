@@ -14,9 +14,9 @@ async function fix(n){
   si.focus();si.select();document.execCommand('insertText',false,key);
   const row=await waitFor(()=>[...document.querySelectorAll('tr')].find(r=>r.innerText.includes(m.title.slice(0,28))&&r.innerText.includes('Dec')),20000);
   L('row found '+n);
-  row.querySelector('button[aria-haspopup],button[id*=menu],button:last-of-type').click();
+  [...row.querySelectorAll('button')].find(b=>b.textContent.includes('Open options')).click();
   await sleep(600);
-  const ed=[...document.querySelectorAll('[role=menuitem],li,a,button')].find(e=>vis(e)&&e.innerText.trim()==='Edit');
+  const ed=[...document.querySelectorAll('button[role=menuitem]')].find(e=>vis(e)&&e.textContent.trim()==='Edit');
   ed.click();
   await waitFor(()=>dlg()&&dlg().querySelector('input[name=title]'));
   await sleep(1500);
