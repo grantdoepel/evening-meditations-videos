@@ -60,7 +60,7 @@ async function one(n){
   await sleep(1500);
   await waitFor(()=>{const b=[...dlg().querySelectorAll('button')].find(b=>b.innerText.trim()==='Save');return b&&!b.disabled;},180000);
   [...dlg().querySelectorAll('button')].find(b=>b.innerText.trim()==='Save').click();
-  await waitFor(()=>!dlg(),30000);
+  await waitFor(()=>!dlg(),240000);
   S.done.push(n);L('saved '+n);await sleep(2500);
 }
 window.EM_run=async list=>{S.err=null;S.running=true;
