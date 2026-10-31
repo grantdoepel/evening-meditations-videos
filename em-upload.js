@@ -57,6 +57,7 @@ async function one(n){
   }
   L('upload done '+n);
   await sleep(1500);
+  await waitFor(()=>{const b=[...dlg().querySelectorAll('button')].find(b=>b.innerText.trim()==='Save');return b&&!b.disabled;},180000);
   [...dlg().querySelectorAll('button')].find(b=>b.innerText.trim()==='Save').click();
   await waitFor(()=>!dlg(),30000);
   S.done.push(n);L('saved '+n);await sleep(2500);
