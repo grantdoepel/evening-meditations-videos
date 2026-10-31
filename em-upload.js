@@ -23,7 +23,7 @@ async function pickMulti(openText,searchPh,items){
 }
 async function one(n){
   let m;while(!(m=(await (await fetch(B+'meta.json?'+Date.now())).json())[n])){S.cur='waiting for '+n;if(S.stop)return;await sleep(60000);}
-  S.cur=n;L('start '+n);
+  S.cur=n;L('start '+n);await sleep(4000);
   if(!dlg()){[...document.querySelectorAll('button')].find(b=>b.innerText.trim()==='Add Content').click();}
   await waitFor(()=>dlg()&&dlg().querySelector('input[name=title]'));
   await sleep(500);
@@ -34,6 +34,7 @@ async function one(n){
   await att(d.querySelector('input[name=featuredImageAlt]'),B+'thumbnails/'+m.t916,m.t916,'image/jpeg');
   await att(d.querySelector('input[name=video]'),B+'videos/'+m.video,m.video,'video/mp4');
   L('files attached '+n);
+  await waitFor(()=>/Upload in progress|Delete Video/i.test(dlg().innerText),90000).catch(()=>{throw new Error('upload did not start for '+n);});
   await clickTab('Details');
   const ce=await waitFor(()=>[...dlg().querySelectorAll('[contenteditable=true]')].find(vis));
   ce.focus();document.execCommand('selectAll');document.execCommand('insertText',false,m.desc);
