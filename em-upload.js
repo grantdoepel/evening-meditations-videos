@@ -1,6 +1,7 @@
 (()=>{
 const B='http://localhost:8766/';
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const __wk=(()=>{try{const w=new Worker(URL.createObjectURL(new Blob(['onmessage=e=>{setTimeout(()=>postMessage(e.data.id),e.data.ms)}'])));const m={};let c=0;w.onmessage=e=>{const f=m[e.data];delete m[e.data];f&&f();};return ms=>new Promise(r=>{const id=++c;m[id]=r;w.postMessage({id,ms});});}catch(e){return null}})();
+const sleep=__wk||(ms=>new Promise(r=>setTimeout(r,ms)));
 const S=window.EM_S=window.EM_S||{log:[],done:[],cur:null,err:null};
 const L=m=>{S.log.push(new Date().toISOString().slice(11,19)+' '+m);if(S.log.length>60)S.log.shift();};
 const dlg=()=>document.querySelector('[role=dialog]');
