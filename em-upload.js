@@ -55,7 +55,7 @@ async function one(n){
     if(!/Upload in progress/i.test(txt)&&/Delete Video/i.test(txt))break;
     if(/Upload in progress/i.test(txt))lastIn=Date.now();
     else if(Date.now()-lastIn>(/Upload a file/i.test(txt)?90000:(seenPct?900000:60000))){
-      if(retries++>=5)throw new Error('video upload kept failing for '+n);
+      if(retries++>=40)throw new Error('video upload kept failing for '+n);
       L('retrying video upload '+n);
       await att(dlg().querySelector('input[name=video]'),B+'videos/'+m.video,m.video,'video/mp4');
       lastIn=Date.now();
