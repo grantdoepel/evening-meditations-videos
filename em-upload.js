@@ -9,7 +9,7 @@ const setV=(el,v)=>{Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'
 const waitFor=async(f,ms=15000)=>{const t=Date.now();while(Date.now()-t<ms){const r=f();if(r)return r;await sleep(250);}throw new Error('timeout waiting');};
 const clickTab=async name=>{const b=[...dlg().querySelectorAll('button')].find(x=>x.innerText.trim()===name);b.click();await sleep(700);};
 const textIn=()=>[...dlg().querySelectorAll('input[type=text]')].filter(vis);
-const att=async(el,url,name,type)=>{const b=await (await fetch(url)).blob();const dt=new DataTransfer();dt.items.add(new File([b],name,{type}));el.files=dt.files;el.dispatchEvent(new Event('change',{bubbles:true}));};
+const att=async(el,url,name,type)=>{let b;for(let i=0;i<120;i++){const r=await fetch(url);if(r.ok){b=await r.blob();if(b.size>1000)break;}await sleep(5000);}const dt=new DataTransfer();dt.items.add(new File([b],name,{type}));el.files=dt.files;el.dispatchEvent(new Event('change',{bubbles:true}));};
 async function pickMulti(openText,searchPh,items){
   const opener=[...dlg().querySelectorAll('*')].filter(e=>vis(e)&&e.children.length===0&&(e.innerText||e.placeholder||'').includes(openText)).pop()||[...dlg().querySelectorAll('input')].find(e=>(e.placeholder||'').includes(openText));
   (opener.closest('button')||opener).click();await sleep(600);
@@ -22,8 +22,7 @@ async function pickMulti(openText,searchPh,items){
   }
 }
 async function one(n){
-  const m=(await (await fetch(B+'meta.json?'+Date.now())).json())[n];
-  if(!m)throw new Error('no meta for '+n);
+  let m;while(!(m=(await (await fetch(B+'meta.json?'+Date.now())).json())[n])){S.cur='waiting for '+n;if(S.stop)return;await sleep(60000);}
   S.cur=n;L('start '+n);
   if(!dlg()){[...document.querySelectorAll('button')].find(b=>b.innerText.trim()==='Add Content').click();}
   await waitFor(()=>dlg()&&dlg().querySelector('input[name=title]'));
