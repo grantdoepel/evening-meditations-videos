@@ -30,7 +30,7 @@ async function one(n){
   const d=dlg();
   setV(d.querySelector('input[name=title]'),m.title);
   const fi=[...d.querySelectorAll('input[type=file]')];
-  await att(fi[1],B+'thumbnails/'+m.t169,m.t169,'image/jpeg');
+  await att(fi[0],B+'thumbnails/'+m.t169,m.t169,'image/jpeg');
   await att(d.querySelector('input[name=featuredImageAlt]'),B+'thumbnails/'+m.t916,m.t916,'image/jpeg');
   await att(d.querySelector('input[name=video]'),B+'videos/'+m.video,m.video,'video/mp4');
   L('files attached '+n);
