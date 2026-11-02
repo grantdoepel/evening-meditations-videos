@@ -49,18 +49,18 @@ async function one(n){
   await pickMulti('Choose collections','search',['Meditations']);
   await sleep(300);
   await clickTab('Content');
-  const t0=Date.now();let lastIn=Date.now(),retries=0,seenPct=false;
+  const t0=Date.now();let lastIn=Date.now(),retries=0,seenPct=false,maxPct=0;
   while(true){
     const txt=dlg().innerText;
     if(!/Upload in progress/i.test(txt)&&/Delete Video/i.test(txt))break;
     if(/Upload in progress/i.test(txt))lastIn=Date.now();
-    else if(Date.now()-lastIn>(/Upload a file/i.test(txt)?90000:(seenPct?900000:60000))){
+    else if(Date.now()-lastIn>(maxPct>=90?900000:(/Upload a file/i.test(txt)?90000:(seenPct?900000:60000)))){
       if(retries++>=40)throw new Error('video upload kept failing for '+n);
-      L('retrying video upload '+n);
+      L('retrying video upload '+n);maxPct=0;
       await att(dlg().querySelector('input[name=video]'),B+'videos/'+m.video,m.video,'video/mp4');
       lastIn=Date.now();
     }
-    S.pct=(txt.match(/\d+(\.\d+)?%/)||[''])[0];if(parseFloat(S.pct)>=1)seenPct=true;
+    S.pct=(txt.match(/\d+(\.\d+)?%/)||[''])[0];if(parseFloat(S.pct)>=1)seenPct=true;if(parseFloat(S.pct)>maxPct)maxPct=parseFloat(S.pct);
     if(Date.now()-t0>3*3600*1000)throw new Error('upload timeout');
     await sleep(3000);
   }
