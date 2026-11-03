@@ -1,3 +1,0 @@
-error: RPC failed; HTTP 504 curl 22 The requested URL returned error: 504
-send-pack: unexpected disconnect while reading sideband packet
-fatal: the remote end hung up unexpectedly
